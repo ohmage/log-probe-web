@@ -25,7 +25,7 @@ logprobe.streams = [
 ];
 
 logprobe.getLogs = function() {
-  console.log(logprobe.payload_id)
+  console.log(logprobe.payload_id+":"+logprobe.streams[0].name)
   omh.read({
     owner: omh.owner,
     payload_id: logprobe.payload_id + ":" + logprobe.streams[0].name,
@@ -41,7 +41,7 @@ logprobe.getLogs = function() {
 logprobe.render = function(data) {
   console.log("done")
   $.each(data, function(i, v) {
-    $(".data").append(v.metadata.timestamp + " " + v.data.tag + ": " + v.data.message.replace("\n","<br>") + "<br>");
+    $(".data").append("<pre>"+v.metadata.timestamp + " " + v.data.tag + ": " + v.data.message + "</pre>");
   });
 };
 
