@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LogProbe</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" media="screen" href="css/style.css">
+  </head>
+  <body>
+    <div class="page landing">
+      <div class="leftCol">
+        <form id="authForm">
+          <div class="inputGroup hidden">
+            <label>OMH URL:</label>
+            <input type="text" name="ohmageURL" value="https://test.ohmage.org"/>
+          </div>
+          <div class="inputGroup">
+            <label>User ID:</label>
+            <input type="text" name="ptsdUserID"/>
+          </div>
+          <div class="inputGroup">
+            <label>Password:</label>
+            <input type="password" name="ptsdPassword"/>
+          </div>
+          <div class="inputGroup">
+            <label>Owner ID:</label>
+            <input type="text" name="ownerID"/>
+          </div>
+          <input type="submit" value="Sign In »">
+        </form>
+      </div>
+
+      <div style="clear: both"></div>
+    </div>
+
+    <script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="js/omh.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+        
+        $("#authForm").submit(function(){
+          omh.init(
+          $("input[name=ohmageURL]").val(),
+          "ptsdDashboard1.0", 
+          $("input[name=ownerID]").val()
+        );
+          omh.authenticate(
+          $("input[name=ptsdUserID]").val(), 
+          $("input[name=ptsdPassword]").val(), {
+            success: function(res) {
+              window.location = "dashboard.html";
+            }
+          });
+          return false;
+        })
+
+      });
+    </script>
+
+  </body>
+</html>

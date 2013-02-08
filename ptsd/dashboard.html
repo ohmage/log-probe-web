@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>LogProbe</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" media="screen" href="css/style.css">
+  </head>
+  <body>
+
+    <div class="page">
+
+      <div class="ctrl">
+        <div class="account"></div><a class="logout">Logout</a>
+      </div>
+
+      <div class="data"></div>
+      
+    </div>
+
+    <script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="js/omh.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/logprobe.js"></script>
+    <script type="text/javascript">
+      $(".signOut").click(
+      function(){
+        localStorage.clear();
+        window.location = "index.html";
+      })
+    </script>
+  </body>
+</html>
