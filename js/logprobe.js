@@ -24,8 +24,9 @@ logprobe.streams = [
   }
 ];
 
+logprobe.data = []
+
 logprobe.getLogs = function() {
-  console.log(logprobe.payload_id+":"+logprobe.streams[0].name)
   omh.read({
     owner: omh.owner,
     payload_id: logprobe.payload_id + ":" + logprobe.streams[0].name,
@@ -33,15 +34,20 @@ logprobe.getLogs = function() {
     success: function(res) {
       if (!res)
         return
-      logprobe.render(res.data);
+        console.log(res.data)
+      logprobe.data = logprobe.data.concat(res.data)
+      logprobe.render();
     }
   })
 }
 
-logprobe.render = function(data) {
-  console.log("done")
-  $.each(data, function(i, v) {
-    $(".data").append("<pre>"+v.metadata.timestamp + " " + v.data.tag + ": " + v.data.message + "</pre>");
+// Renders the data to the page. Adds the level as a class to each line so visibility can be toggled
+logprobe.render = function() {
+  $(".data").empty();
+  $.each(logprobe.data, function(i, v) {
+    pre = $("<pre>"+v.metadata.timestamp + " " + v.data.tag + ": " + v.data.message + "</pre>");
+    pre.addClass(v.data.level);
+    $(".data").append(pre);
   });
 };
 
@@ -52,4 +58,9 @@ $(document).ready(function() {
     omh.logout();
   });
   logprobe.getLogs();
+
+  // Add a click function to the checkboxes which toggles the visibility of the selected level
+  $(".filter :checkbox").click(function() {
+    $('.data .'+$(this).attr("name")).toggle($(this).is(':checked'));
+  });
 });
