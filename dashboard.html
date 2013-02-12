@@ -30,6 +30,19 @@
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/logprobe.js"></script>
     <script type="text/javascript">
+      // Add a method to watch text for the owner
+      $(".account .username")
+        .data('timeout', null)
+        .keyup(function(){
+            clearTimeout($(this).data('timeout'));
+            $(this).data('timeout', setTimeout(logprobe.getLogs($(this).attr('value')), 2000));
+        });
+
+      // Add a click function to the checkboxes which toggles the visibility of the selected level
+      $(".filter :checkbox").click(function() {
+        logprobe.toggle($(this).attr("name"), $(this).is(':checked'))
+      });
+
       $(".logout").click(
       function(){
         localStorage.clear();

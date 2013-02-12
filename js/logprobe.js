@@ -47,21 +47,12 @@ logprobe.render = function(data) {
   });
 };
 
+logprobe.toggle = function(level, visible) {
+  $('.data .'+level).toggle(visible);
+}
+
 $(document).ready(function() {
   omh.init();
   $(".account .username").attr('value', omh.get("omh.owner"));
   logprobe.getLogs(omh.get("omh.owner"));
-
-  // Add a method to watch text for the owner
-  $(".account .username")
-    .data('timeout', null)
-    .keyup(function(){
-        clearTimeout($(this).data('timeout'));
-        $(this).data('timeout', setTimeout(logprobe.getLogs($(this).attr('value')), 2000));
-    });
-
-  // Add a click function to the checkboxes which toggles the visibility of the selected level
-  $(".filter :checkbox").click(function() {
-    $('.data .'+$(this).attr("name")).toggle($(this).is(':checked'));
-  });
 });
