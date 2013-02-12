@@ -37,24 +37,23 @@
 
     <script type="text/javascript">
       $(document).ready(function() {
-        
+
         $("#authForm").submit(function(){
           omh.init(
-          $("input[name=ohmageURL]").val(),
-          "ptsdDashboard1.0", 
-          $("input[name=ownerID]").val()
-        );
+            $("input[name=ohmageURL]").val(),
+            "ptsdDashboard1.0",
+            $("input[name=ownerID]").val() || $("input[name=ptsdUserID]").val()
+          );
           omh.authenticate(
-          $("input[name=ptsdUserID]").val(), 
-          $("input[name=ptsdPassword]").val(), {
-            success: function(res) {
-              window.location = "dashboard.html";
-            }
-          });
-          return false;
-        })
-
-      });
+            $("input[name=ptsdUserID]").val(),
+            $("input[name=ptsdPassword]").val(), {
+              success: function(res) {
+                window.location = "dashboard.html";
+              }
+            });
+            return false;
+          })
+        });
     </script>
 
   </body>

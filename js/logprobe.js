@@ -24,27 +24,23 @@ logprobe.streams = [
   }
 ];
 
-logprobe.data = []
-
-logprobe.getLogs = function() {
+logprobe.getLogs = function(owner_id) {
   omh.read({
-    owner: omh.owner,
+    owner: owner_id,
     payload_id: logprobe.payload_id + ":" + logprobe.streams[0].name,
     payload_version: "1",
     success: function(res) {
       if (!res)
         return
-        console.log(res.data)
-      logprobe.data = logprobe.data.concat(res.data)
-      logprobe.render();
+      logprobe.render(res.data);
     }
   })
 }
 
 // Renders the data to the page. Adds the level as a class to each line so visibility can be toggled
-logprobe.render = function() {
+logprobe.render = function(data) {
   $(".data").empty();
-  $.each(logprobe.data, function(i, v) {
+  $.each(data, function(i, v) {
     pre = $("<pre>"+v.metadata.timestamp + " " + v.data.tag + ": " + v.data.message + "</pre>");
     pre.addClass(v.data.level);
     $(".data").append(pre);
@@ -53,11 +49,16 @@ logprobe.render = function() {
 
 $(document).ready(function() {
   omh.init();
-  $(".account").text("Account: "+omh.get("omh.owner"));
-  $(".logout").click(function() {
-    omh.logout();
-  });
-  logprobe.getLogs();
+  $(".account .username").attr('value', omh.get("omh.owner"));
+  logprobe.getLogs(omh.get("omh.owner"));
+
+  // Add a method to watch text for the owner
+  $(".account .username")
+    .data('timeout', null)
+    .keyup(function(){
+        clearTimeout($(this).data('timeout'));
+        $(this).data('timeout', setTimeout(logprobe.getLogs($(this).attr('value')), 2000));
+    });
 
   // Add a click function to the checkboxes which toggles the visibility of the selected level
   $(".filter :checkbox").click(function() {

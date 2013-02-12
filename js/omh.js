@@ -87,9 +87,3 @@ omh.read = function(params){
     console.log(jqXHR)
   });
 }
-
-omh.logout = function(){
-	localStorage.removeItem('omh.token')
-  localStorage.removeItem('omh.username')
-	window.location="index.html";
-}
