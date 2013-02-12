@@ -11,15 +11,18 @@
     <div class="page">
 
       <div class="ctrl">
-        <div class="account">Account: <input class="username"></input></div><button class="logout">Logout</button>
-        <p class="filter">
-          <label>error: <input type="checkbox" name="error" checked="checked"></label>
-          <label>warning: <input type="checkbox" name="warning" checked="checked"></label>
-          <label>debug: <input type="checkbox" name="debug" checked="checked"></label>
-          <label>info: <input type="checkbox" name="info" checked="checked"></label>
-          <label>verbose: <input type="checkbox" name="verbose" checked="checked"></label>
-        </p>
+        <div class="ohmageURL"></div>
+        <div class="account"></div>
+        <button class="logout">Logout</button>
       </div>
+      <div>Account: <input class="owner"></input></div>
+      <p class="filter">
+        <label>error: <input type="checkbox" name="error" checked="checked"></label>
+        <label>warning: <input type="checkbox" name="warning" checked="checked"></label>
+        <label>debug: <input type="checkbox" name="debug" checked="checked"></label>
+        <label>info: <input type="checkbox" name="info" checked="checked"></label>
+        <label>verbose: <input type="checkbox" name="verbose" checked="checked"></label>
+      </p>
 
       <div class="data"></div>
       
@@ -30,24 +33,32 @@
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/logprobe.js"></script>
     <script type="text/javascript">
-      // Add a method to watch text for the owner
-      $(".account .username")
-        .data('timeout', null)
-        .keyup(function(){
-            clearTimeout($(this).data('timeout'));
-            $(this).data('timeout', setTimeout(logprobe.getLogs($(this).attr('value')), 2000));
+      $(document).ready(function() {
+        omh.init();
+        // Setup intial values
+        $(".owner").attr('value', omh.get("omh.owner"));
+        $(".ohmageURL").text(omh.get("omh.baseurl"));
+        $(".account").text(omh.get("omh.owner"));
+
+        // Add a method to watch text for the owner
+        $(".account .username")
+          .data('timeout', null)
+          .keyup(function(){
+              clearTimeout($(this).data('timeout'));
+              $(this).data('timeout', setTimeout(logprobe.getLogs($(this).attr('value')), 2000));
+          });
+
+        // Add a click function to the checkboxes which toggles the visibility of the selected level
+        $(".filter :checkbox").click(function() {
+          logprobe.toggle($(this).attr("name"), $(this).is(':checked'))
         });
 
-      // Add a click function to the checkboxes which toggles the visibility of the selected level
-      $(".filter :checkbox").click(function() {
-        logprobe.toggle($(this).attr("name"), $(this).is(':checked'))
+        $(".logout").click(
+        function(){
+          localStorage.clear();
+          window.location = "index.html";
+        })
       });
-
-      $(".logout").click(
-      function(){
-        localStorage.clear();
-        window.location = "index.html";
-      })
     </script>
   </body>
 </html>

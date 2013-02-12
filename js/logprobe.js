@@ -53,6 +53,5 @@ logprobe.toggle = function(level, visible) {
 
 $(document).ready(function() {
   omh.init();
-  $(".account .username").attr('value', omh.get("omh.owner"));
   logprobe.getLogs(omh.get("omh.owner"));
 });
